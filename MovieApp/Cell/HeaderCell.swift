@@ -11,7 +11,6 @@ class HeaderCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Popular"
         label.font = .systemFont(ofSize: 20, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -45,5 +44,10 @@ class HeaderCell: UICollectionViewCell {
             button.trailingAnchor.constraint(equalTo: trailingAnchor),
             button.topAnchor.constraint(equalTo: topAnchor)
         ])
+    }
+    
+    func configure(title: String, data: [MovieResult]) {
+        configureUI()
+        nameLabel.text = title
     }
 }

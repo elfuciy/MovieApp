@@ -25,6 +25,8 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         title = "Page1"
         configureUI()
+        configure()
+        
     }
     
     func createLeayout() -> UICollectionViewCompositionalLayout {
@@ -35,12 +37,26 @@ class HomeController: UIViewController {
     
     private func configureUI() {
         view.addSubview(collection)
+        
         NSLayoutConstraint.activate([
             collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])}
+    
+    private func configure() {
+        modelView.getAllData()
+      
+        modelView.errorHandler = { error in
+            print(error)
+        }
+        
+        modelView.completion = {
+            print(self.modelView.movieItems)
+            self.collection.reloadData()
+        }
+    }
 }
 
 extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -51,7 +67,9 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch modelView.sections[indexPath.section] {
         case .heading:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath) as! HeaderCell
+            let model = modelView.movieItems[indexPath.row]
+            cell.configure(title: model.title, data: model.item)
             return cell
         case .popular, .trending, .upcoming:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCell", for: indexPath)
