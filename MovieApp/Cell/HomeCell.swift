@@ -19,7 +19,7 @@ class HomeCell: UICollectionViewCell {
         return imageView
     }()
     
-    let imageUrl = "https://image.tmdb.org/t/p/original"
+    let network = NetworkManager()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,7 +40,7 @@ class HomeCell: UICollectionViewCell {
     }
     
     func configure(data: MovieResult) {
-        let urlPrefix = "\(imageUrl)\(data.posterPath ?? "")"
+        let urlPrefix = "\(network.imageUrl)\(data.posterPath ?? "")"
         let url = URL(string: "\(urlPrefix)")
         imageView.kf.setImage(with: url)    }
 }

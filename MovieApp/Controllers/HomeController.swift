@@ -20,6 +20,7 @@ class HomeController: UIViewController {
     }()
     
     let modelView = HomeModelView()
+    var sectionTitle: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,10 +62,11 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
         case .heading:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath) as! HeaderCell
             if modelView.sections[indexPath.section] == .heading {
-                cell.configure(title: modelView.sections[indexPath.section + 1].rawValue)
+                cell.configure(title:modelView.sections[indexPath.section + 1].rawValue, index: indexPath.section + 1)
             }
-            cell.callBack = {
+            cell.callBack = { index in
                 let controller = ExtendedListController()
+                controller.sectionName = self.modelView.movieItems.filter({$0.title == self.modelView.sections[index].rawValue}).first!.title
                 self.navigationController?.show(controller, sender: nil)
             }
             return cell

@@ -27,8 +27,8 @@ class HeaderCell: UICollectionViewCell {
         return button
     }()
     
-    var callBack: (() -> Void)?
-    
+    var callBack: ((Int) -> Void)?
+    var index = Int()
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -51,12 +51,13 @@ class HeaderCell: UICollectionViewCell {
         ])
     }
     
-    func configure(title: String) {
+    func configure(title: String, index: Int) {
         configureUI()
         nameLabel.text = title
+        self.index = index
     }
     
     @objc func addAction() {
-        callBack?()
+        callBack?(index)
     }
 }

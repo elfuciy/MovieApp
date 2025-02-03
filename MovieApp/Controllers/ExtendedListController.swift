@@ -31,15 +31,17 @@ class ExtendedListController: UIViewController {
         let field = UITextField()
         field.placeholder = "Search"
         field.textAlignment = .center
+        field.addTarget(self, action: #selector(searchData), for: .editingChanged)
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
     
     let modelView = ExtendedListViewModel()
+    var sectionName: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configurUI()
+        configure()
     }
     
     private func configurUI() {
@@ -55,7 +57,7 @@ class ExtendedListController: UIViewController {
             searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -12 ),
             searchView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            collection.topAnchor.constraint(equalTo: searchView.bottomAnchor),
+            collection.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 12),
             collection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -68,15 +70,40 @@ class ExtendedListController: UIViewController {
            
         ])
     }
+    
+    func configure() {
+        modelView.getData(endpoint: sectionName)
+        modelView.errorHandler = { error in
+            print(error)
+        }
+        
+        modelView.completion = {
+            self.collection.reloadData()
+        }
+        configurUI()
+        title = sectionName
+    }
+    
+    @objc func searchData() {
+        modelView.searchBarFunc(searchBar: searchBar.text ?? "", collectionView: collection)
+        print(searchBar.text ?? "")
+    }
 }
 
 extension ExtendedListController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        5
+        modelView.numberOfItems()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collection.dequeueReusableCell(withReuseIdentifier: "ExtendedListCell", for: indexPath)
+        let cell = collection.dequeueReusableCell(withReuseIdentifier: "ExtendedListCell", for: indexPath) as! ExtendedListCell
+        if modelView.isSearched {
+            cell.configure(data: modelView.fileteredData[indexPath.row])
+
+        } else {
+            cell.configure(data: modelView.movieItems[indexPath.row])
+        }
         return cell
     }
     

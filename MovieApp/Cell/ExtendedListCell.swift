@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ExtendedListCell: UICollectionViewCell {
     
@@ -14,7 +15,6 @@ class ExtendedListCell: UICollectionViewCell {
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.layer.cornerRadius = 16
-        image.backgroundColor = .brown
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -29,7 +29,8 @@ class ExtendedListCell: UICollectionViewCell {
     
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        label.font = .systemFont(ofSize: 16, weight: .light)
+        label.textColor = .systemGray
         label.text = "rating"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -74,6 +75,9 @@ class ExtendedListCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    let network = NetworkManager()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -88,12 +92,12 @@ class ExtendedListCell: UICollectionViewCell {
         backgroundColor = .white
         [image,
          nameLabel,
-         ratingLabel,
          genreLabel,
          directorLabel,
          languageView,
          ratingView,
          lengthView].forEach({addSubview($0)})
+        ratingView.addSubview(ratingLabel)
         
         NSLayoutConstraint.activate([
             image.heightAnchor.constraint(equalToConstant: 350),
@@ -119,8 +123,9 @@ class ExtendedListCell: UICollectionViewCell {
             ratingView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 16),
             ratingView.leadingAnchor.constraint(equalTo: lengthView.trailingAnchor, constant: 44),
             
-            ratingLabel.topAnchor.constraint(equalTo: languageView.bottomAnchor, constant: 28),
-            ratingLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
+            ratingLabel.topAnchor.constraint(equalTo: ratingView.topAnchor),
+            ratingLabel.leadingAnchor.constraint(equalTo: ratingView.leadingAnchor),
+            ratingLabel.centerXAnchor.constraint(equalTo: ratingView.centerXAnchor),
             
             genreLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 8),
             genreLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
@@ -128,8 +133,17 @@ class ExtendedListCell: UICollectionViewCell {
             directorLabel.topAnchor.constraint(equalTo: genreLabel.bottomAnchor, constant: 8),
             directorLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
             
-
+            
         ])
     }
     
+    func configure(data: MovieResult) {
+        let urlPrefix = "\(network.imageUrl)\(data.posterPath ?? "")"
+        let url = URL(string: "\(urlPrefix)")
+        image.kf.setImage(with: url)
+        
+        nameLabel.text = data.originalTitle
+    }
 }
+    
+

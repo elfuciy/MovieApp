@@ -31,9 +31,7 @@ class HomeModelView {
     
     var errorHandler: ((String) -> Void)?
     var completion: (() -> Void)?
-    
-    var count: Int = 0
-    
+        
     func createSecton() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { sectionNumber, environment in
             switch self.sections[sectionNumber] {
