@@ -15,10 +15,11 @@ class HomeCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 16
-        imageView.backgroundColor = .brown
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+    
+    let imageUrl = "https://image.tmdb.org/t/p/original"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,7 +31,6 @@ class HomeCell: UICollectionViewCell {
     }
     private func configureUI() {
         addSubview(imageView)
-        configure()
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: topAnchor),
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -39,8 +39,8 @@ class HomeCell: UICollectionViewCell {
         ])
     }
     
-    func configure() {
-        let urlPrefix = "https://raw.githubusercontent.com/onevcat/Kingfisher-TestImages/master/DemoAppImage/Loading/kingfisher"
-        let url = URL(string: "\(urlPrefix)-1.jpg")
+    func configure(data: MovieResult) {
+        let urlPrefix = "\(imageUrl)\(data.posterPath ?? "")"
+        let url = URL(string: "\(urlPrefix)")
         imageView.kf.setImage(with: url)    }
 }

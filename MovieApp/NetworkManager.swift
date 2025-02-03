@@ -22,6 +22,7 @@ enum EncodingType {
 
 class NetworkManager {
     let baseUrl = "https://api.themoviedb.org/3/movie/"
+    let imageUrl = "https://image.tmdb.org/t/p/original"
     let header: HTTPHeaders = ["Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YWVmNTVjZDBhM2UwZDgzODY1YjZiYTc0Mzk0YjNiZCIsIm5iZiI6MTczODQxMDQzNi43MjEsInN1YiI6IjY3OWUwOWM0N2I0MTUzYTNiOTk1NGE0ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.PbjszFro48ez7a8qpn5N-yJnJY7KqXJ-Ce2Uy8WpkEE"]
     
     func request2<T: Codable>(endPoint: EndPoint,

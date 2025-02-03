@@ -35,7 +35,6 @@ class TabBar: UITabBarController, UITabBarControllerDelegate {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        print("ddddd")
     }
     
     private func setView() {

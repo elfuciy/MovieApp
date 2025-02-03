@@ -21,9 +21,13 @@ class HeaderCell: UICollectionViewCell {
         button.setTitleColor(.systemBlue, for: .normal)
         button.setTitle("see all", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 13, weight: .regular)
+        button.addTarget(self, action: #selector(addAction), for: .touchUpInside)
+        button.isEnabled = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    var callBack: (() -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,7 +41,8 @@ class HeaderCell: UICollectionViewCell {
     private func configureUI() {
         addSubview(nameLabel)
         addSubview(button)
-        
+        isUserInteractionEnabled = true
+
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             nameLabel.topAnchor.constraint(equalTo: topAnchor),
@@ -46,8 +51,12 @@ class HeaderCell: UICollectionViewCell {
         ])
     }
     
-    func configure(title: String, data: [MovieResult]) {
+    func configure(title: String) {
         configureUI()
         nameLabel.text = title
+    }
+    
+    @objc func addAction() {
+        callBack?()
     }
 }

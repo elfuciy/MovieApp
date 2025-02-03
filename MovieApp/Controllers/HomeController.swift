@@ -10,7 +10,7 @@ import UIKit
 class HomeController: UIViewController {
 
     private lazy var collection: UICollectionView = {
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: createLeayout())
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: modelView.createSecton())
         collection.delegate = self
         collection.dataSource = self
         collection.translatesAutoresizingMaskIntoConstraints = false
@@ -23,16 +23,9 @@ class HomeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Page1"
         configureUI()
         configure()
         
-    }
-    
-    func createLeayout() -> UICollectionViewCompositionalLayout {
-        UICollectionViewCompositionalLayout { sectionIndex, environment in
-            self.modelView.createSecton(section: sectionIndex)
-        }
     }
     
     private func configureUI() {
@@ -53,7 +46,6 @@ class HomeController: UIViewController {
         }
         
         modelView.completion = {
-            print(self.modelView.movieItems)
             self.collection.reloadData()
         }
     }
@@ -68,17 +60,26 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
         switch modelView.sections[indexPath.section] {
         case .heading:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath) as! HeaderCell
-            let model = modelView.movieItems[indexPath.row]
-            cell.configure(title: model.title, data: model.item)
+            if modelView.sections[indexPath.section] == .heading {
+                cell.configure(title: modelView.sections[indexPath.section + 1].rawValue)
+            }
+            cell.callBack = {
+                let controller = ExtendedListController()
+                self.navigationController?.show(controller, sender: nil)
+            }
             return cell
-        case .popular, .trending, .upcoming:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCell", for: indexPath)
+        case .popular, .trending, .upcoming, .nowPlaying:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCell", for: indexPath) as! HomeCell
+            if modelView.sections[indexPath.section] == .nowPlaying || modelView.sections[indexPath.section] == .popular || modelView.sections[indexPath.section] == .trending || modelView.sections[indexPath.section] == .upcoming {
+                cell.configure(data: modelView.movieItems.filter({$0.title == modelView.sections[indexPath.section].rawValue}).first!.item[indexPath.row])
+            }
             return cell
         }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        6
+        8
     }
+    
 }
 

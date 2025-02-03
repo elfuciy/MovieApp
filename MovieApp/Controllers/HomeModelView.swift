@@ -8,11 +8,12 @@
 import Foundation
 import UIKit
 
-enum Sections {
-    case popular
+enum Sections: String {
+    case popular = "Popular"
     case heading
-    case trending
-    case upcoming
+    case trending = "TopRated"
+    case upcoming = "Upcoming"
+    case nowPlaying = "NowPlaying"
 }
 
 struct HomeModel {
@@ -22,7 +23,7 @@ struct HomeModel {
 
 class HomeModelView {
     
-    let sections: [Sections] = [.heading, .popular, .heading, .trending, .heading, .upcoming]
+    let sections: [Sections] = [.heading, .popular, .heading, .trending, .heading, .nowPlaying, .heading, .upcoming]
     var movies: [Movie] = []
     var movieItems: [HomeModel] = []
     
@@ -31,12 +32,16 @@ class HomeModelView {
     var errorHandler: ((String) -> Void)?
     var completion: (() -> Void)?
     
-    func createSecton(section: Int) -> NSCollectionLayoutSection {
-        switch sections[section] {
-        case .popular, .trending, .upcoming:
-            CompositionalLayout.createMovies()
-        case .heading:
-            CompositionalLayout.createHeading()
+    var count: Int = 0
+    
+    func createSecton() -> UICollectionViewCompositionalLayout {
+        UICollectionViewCompositionalLayout { sectionNumber, environment in
+            switch self.sections[sectionNumber] {
+            case .popular, .trending, .upcoming, .nowPlaying:
+                CompositionalLayout.createMovies()
+            case .heading:
+                CompositionalLayout.createHeading()
+            }
         }
     }
     
@@ -44,8 +49,8 @@ class HomeModelView {
         switch sections[section] {
         case .heading:
             return 1
-        case .popular, .trending, .upcoming:
-            return movieItems.count
+        case .popular, .trending, .upcoming, .nowPlaying:
+            return movieItems.filter({$0.title == sections[section].rawValue}).first?.item.count ?? 0
         }
     }
     
@@ -53,8 +58,7 @@ class HomeModelView {
         getNowPlaying()
         getPopular()
         getUpcoming()
-//        getTopRated()
-        print(movieItems)
+        getTopRated()
     }
     
     func getNowPlaying() {
