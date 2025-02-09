@@ -14,7 +14,7 @@ class HomeController: UIViewController {
         collection.delegate = self
         collection.dataSource = self
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(HomeCell.self, forCellWithReuseIdentifier: "HomeCell")
+        collection.register(ImageLabelCell.self, forCellWithReuseIdentifier: "ImageLabelCell")
         collection.register(HeaderCell.self, forCellWithReuseIdentifier: "HeaderCell")
         return collection
     }()
@@ -73,7 +73,7 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
             }
             return cell
         case .popular, .trending, .upcoming, .nowPlaying:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCell", for: indexPath) as! HomeCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageLabelCell", for: indexPath) as! ImageLabelCell
             if modelView.sections[indexPath.section] == .nowPlaying || modelView.sections[indexPath.section] == .popular || modelView.sections[indexPath.section] == .trending || modelView.sections[indexPath.section] == .upcoming {
                 cell.configure(data: modelView.movieItems.filter({$0.title == modelView.sections[indexPath.section].rawValue}).first!.item[indexPath.row])
             }
@@ -83,6 +83,12 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         8
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let controller = DetailController()
+        controller.movieDeatail = modelView.movieItems[indexPath.section]
+        navigationController?.show(controller, sender: self)
     }
     
 }

@@ -10,11 +10,11 @@ import UIKit
 class SearchController: UIViewController {
 
     private lazy var collection: UICollectionView = {
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: CompositionalLayout.createExpandedMovie())
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: CompositionalLayout.createInfo())
         collection.delegate = self
         collection.dataSource = self
         collection.backgroundColor = .clear
-        collection.register(ExtendedListCell.self, forCellWithReuseIdentifier: "ExtendedListCell")
+        collection.register(SearchCell.self, forCellWithReuseIdentifier: "SearchCell")
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
@@ -66,7 +66,7 @@ class SearchController: UIViewController {
             searchView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchView.heightAnchor.constraint(equalToConstant: 50),
             searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
-            searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -12 ),
+            searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -8 ),
             searchView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             collection.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 12),
@@ -79,7 +79,6 @@ class SearchController: UIViewController {
             searchBar.trailingAnchor.constraint(equalTo: searchView.trailingAnchor),
             searchBar.bottomAnchor.constraint(equalTo: searchView.bottomAnchor),
             
-            imageView.topAnchor.constraint(equalTo: searchView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: searchView.leadingAnchor, constant: 8),
             imageView.heightAnchor.constraint(equalToConstant: 25),
             imageView.widthAnchor.constraint(equalToConstant: 25),
@@ -106,10 +105,14 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collection.dequeueReusableCell(withReuseIdentifier: "ExtendedListCell", for: indexPath) as! ExtendedListCell
+        let cell = collection.dequeueReusableCell(withReuseIdentifier: "SearchCell", for: indexPath) as! SearchCell
         cell.configure(data: modelView.searchArray[indexPath.row])
         return cell
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let controller = DetailController()
+        controller.movieDeatail = modelView.searchArray[indexPath.row]
+        navigationController?.show(controller, sender: nil)
+    }
 }

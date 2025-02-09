@@ -18,7 +18,7 @@ class CompositionalLayout {
         return section
     }
     
-    static func createMovies() -> NSCollectionLayoutSection {
+    static func createImageLabel() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(167), heightDimension: .absolute(280)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
@@ -28,7 +28,15 @@ class CompositionalLayout {
         return section
     }
     
-    static func createExpandedMovie() -> UICollectionViewCompositionalLayout {
+    static func CreateEstimateInfo() -> UICollectionViewCompositionalLayout {
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(700)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0)
+        return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    static func createInfo() -> UICollectionViewCompositionalLayout {
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.95)), subitems: [item])
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 12, trailing: 12)
@@ -36,7 +44,8 @@ class CompositionalLayout {
         return UICollectionViewCompositionalLayout(section: section)
     }
     
-    static func createActor() -> UICollectionViewCompositionalLayout {
+    
+    static func doubleCreateImageLabel() -> UICollectionViewCompositionalLayout {
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1)))
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 0)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(280)), subitems: [item, item])

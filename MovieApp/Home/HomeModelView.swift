@@ -47,7 +47,7 @@ class HomeModelView {
         UICollectionViewCompositionalLayout { sectionNumber, environment in
             switch self.sections[sectionNumber] {
             case .popular, .trending, .upcoming, .nowPlaying:
-                CompositionalLayout.createMovies()
+                CompositionalLayout.createImageLabel()
             case .heading:
                 CompositionalLayout.createHeading()
             }

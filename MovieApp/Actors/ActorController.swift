@@ -10,11 +10,11 @@ import UIKit
 class ActorController: UIViewController {
     
     private lazy var collection: UICollectionView = {
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: CompositionalLayout.createActor())
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: CompositionalLayout.doubleCreateImageLabel())
         collection.delegate = self
         collection.dataSource = self
         collection.backgroundColor = .clear
-        collection.register(HomeCell.self, forCellWithReuseIdentifier: "HomeCell")
+        collection.register(ImageLabelCell.self, forCellWithReuseIdentifier: "ImageLabelCell")
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
@@ -57,7 +57,7 @@ extension ActorController: UICollectionViewDelegate, UICollectionViewDataSource 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collection.dequeueReusableCell(withReuseIdentifier: "HomeCell", for: indexPath) as! HomeCell
+        let cell = collection.dequeueReusableCell(withReuseIdentifier: "ImageLabelCell", for: indexPath) as! ImageLabelCell
         cell.configure(data: modelView.actorArray[indexPath.row])
         return cell
     }

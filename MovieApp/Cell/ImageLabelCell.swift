@@ -7,12 +7,7 @@
 
 import UIKit
 
-protocol MovieCellProtocol {
-    var imageUrl: String { get }
-    var titleText: String { get }
-}
-
-class HomeCell: UICollectionViewCell {
+class ImageLabelCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -51,7 +46,7 @@ class HomeCell: UICollectionViewCell {
             nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor),
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            nameLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
+            nameLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
     

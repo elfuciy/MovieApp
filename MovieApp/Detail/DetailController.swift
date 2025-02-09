@@ -9,75 +9,48 @@ import UIKit
 
 class DetailController: UIViewController {
     
-    private lazy var image: UIImageView = {
-        let image = UIImageView()
-        image.contentMode = .scaleAspectFill
-        image.clipsToBounds = true
-        image.layer.cornerRadius = 16
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
+    private lazy var collection: UICollectionView = {
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: CompositionalLayout.CreateEstimateInfo())
+        collection.delegate = self
+        collection.dataSource = self
+        collection.backgroundColor = .clear
+        collection.register(DetailCell.self, forCellWithReuseIdentifier: "ExtendedListCell")
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        return collection
     }()
-    
-    private lazy var nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
-        label.text = "Name"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private lazy var ratingLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .light)
-        label.textColor = .systemGray
-        label.text = "rating"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private lazy var genreLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
-        label.text = "genre"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private lazy var directorLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
-        label.text = "director"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private lazy var languageView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray6
-        view.layer.cornerRadius = 8
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private lazy var ratingView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray6
-        view.layer.cornerRadius = 8
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private lazy var lengthView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray6
-        view.layer.cornerRadius = 8
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+
+        var movieDeatail: SearchResult?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configurUI()
+    }
+    
+    private func configurUI() {
+        view.backgroundColor = .white
+        view.addSubview(collection)
+        title = movieDeatail?.title
         
+        NSLayoutConstraint.activate([
+            collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
     }
 
 }
+
+extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collection.dequeueReusableCell(withReuseIdentifier: "ExtendedListCell", for: indexPath) as! DetailCell
+            cell.configure(data: movieDeatail!)
+        return cell
+    }
+}
+

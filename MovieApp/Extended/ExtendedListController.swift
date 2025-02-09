@@ -10,11 +10,11 @@ import UIKit
 class ExtendedListController: UIViewController {
 
     private lazy var collection: UICollectionView = {
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: CompositionalLayout.createExpandedMovie())
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: CompositionalLayout.doubleCreateImageLabel())
         collection.delegate = self
         collection.dataSource = self
         collection.backgroundColor = .clear
-        collection.register(ExtendedListCell.self, forCellWithReuseIdentifier: "ExtendedListCell")
+        collection.register(ImageLabelCell.self, forCellWithReuseIdentifier: "ImageLabelCell")
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
@@ -108,7 +108,7 @@ extension ExtendedListController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collection.dequeueReusableCell(withReuseIdentifier: "ExtendedListCell", for: indexPath) as! ExtendedListCell
+        let cell = collection.dequeueReusableCell(withReuseIdentifier: "ImageLabelCell", for: indexPath) as! ImageLabelCell
         if isSearched {
             cell.configure(data: fileteredData[indexPath.row])
         } else {

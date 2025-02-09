@@ -33,7 +33,7 @@ struct SearchModel: Codable {
 }
 
 // MARK: - Result
-struct SearchResult: Codable, MovieCellProtocol {
+struct SearchResult: Codable, SearchProtocol {
     let adult: Bool?
     let backdropPath: String?
     let genreIDS: [Int]?
@@ -67,4 +67,26 @@ struct SearchResult: Codable, MovieCellProtocol {
     var titleText: String {
         originalTitle ?? ""
     }
+    
+
+    var ratingText: Double {
+        voteAverage ?? 0
+    }
+    
+//    var genreText: String {
+//
+//    }
+    
+    var infoText: String {
+        overview ?? ""
+    }
+    
+//    var directorText: String {
+//
+//    }
+    
+    var languageText: String {
+        originalLanguage ?? ""
+    }
+    
 }
