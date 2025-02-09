@@ -1,13 +1,13 @@
 //
-//  ExtendedListController.swift
+//  UnknownController.swift
 //  MovieApp
 //
-//  Created by Elsever on 03.02.25.
+//  Created by Elsever on 01.02.25.
 //
 
 import UIKit
 
-class ExtendedListController: UIViewController {
+class SearchController: UIViewController {
 
     private lazy var collection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: CompositionalLayout.createExpandedMovie())
@@ -23,6 +23,8 @@ class ExtendedListController: UIViewController {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 16
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.systemBlue.cgColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -30,25 +32,35 @@ class ExtendedListController: UIViewController {
     private lazy var searchBar: UITextField  = {
         let field = UITextField()
         field.placeholder = "Search"
-        field.textAlignment = .center
+        field.textAlignment = .left
         field.addTarget(self, action: #selector(searchData), for: .editingChanged)
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
     
-    let modelView = ExtendedListViewModel()
-    var sectionName: String?
+    private lazy var imageView: UIImageView = {
+       let image = UIImageView()
+        image.image = UIImage(systemName: "magnifyingglass")
+        image.contentMode = .scaleAspectFit
+        image.tintColor = .systemGray
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    let modelView = SearchViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure()
+        configureUI()
     }
     
-    private func configurUI() {
-        view.backgroundColor = .systemGray6
-        view.addSubview(searchView)
+    private func configureUI() {
         view.addSubview(collection)
+        view.addSubview(searchView)
         searchView.addSubview(searchBar)
+        searchView.addSubview(imageView)
+        title = "Search"
+        view.backgroundColor = .systemGray6
         
         NSLayoutConstraint.activate([
             searchView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -63,16 +75,21 @@ class ExtendedListController: UIViewController {
             collection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             searchBar.topAnchor.constraint(equalTo: searchView.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: searchView.leadingAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 4),
             searchBar.trailingAnchor.constraint(equalTo: searchView.trailingAnchor),
-            searchBar.bottomAnchor.constraint(equalTo: searchView.bottomAnchor)
+            searchBar.bottomAnchor.constraint(equalTo: searchView.bottomAnchor),
             
-           
+            imageView.topAnchor.constraint(equalTo: searchView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: searchView.leadingAnchor, constant: 8),
+            imageView.heightAnchor.constraint(equalToConstant: 25),
+            imageView.widthAnchor.constraint(equalToConstant: 25),
+            imageView.centerYAnchor.constraint(equalTo: searchView.centerYAnchor)
         ])
     }
     
-    func configure() {
-        modelView.getData(endpoint: sectionName)
+    @objc func searchData() {
+        modelView.getData(queryString: searchBar.text ?? "")
+        
         modelView.errorHandler = { error in
             print(error)
         }
@@ -80,30 +97,17 @@ class ExtendedListController: UIViewController {
         modelView.completion = {
             self.collection.reloadData()
         }
-        configurUI()
-        title = sectionName
-    }
-    
-    @objc func searchData() {
-        modelView.searchBarFunc(searchBar: searchBar.text ?? "", collectionView: collection)
-        print(searchBar.text ?? "")
     }
 }
 
-extension ExtendedListController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
+extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        modelView.numberOfItems()
+        modelView.searchArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collection.dequeueReusableCell(withReuseIdentifier: "ExtendedListCell", for: indexPath) as! ExtendedListCell
-        if modelView.isSearched {
-            cell.configure(data: modelView.fileteredData[indexPath.row])
-
-        } else {
-            cell.configure(data: modelView.movieItems[indexPath.row])
-        }
+        cell.configure(data: modelView.searchArray[indexPath.row])
         return cell
     }
     

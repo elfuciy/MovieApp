@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class ExtendedListCell: UICollectionViewCell {
     
@@ -75,9 +74,7 @@ class ExtendedListCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    let network = NetworkManager()
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -137,12 +134,9 @@ class ExtendedListCell: UICollectionViewCell {
         ])
     }
     
-    func configure(data: MovieResult) {
-        let urlPrefix = "\(network.imageUrl)\(data.posterPath ?? "")"
-        let url = URL(string: "\(urlPrefix)")
-        image.kf.setImage(with: url)
-        
-        nameLabel.text = data.originalTitle
+    func configure(data: MovieCellProtocol) {
+        image.loadImage(url: data.imageUrl)
+        nameLabel.text = data.titleText
     }
 }
     

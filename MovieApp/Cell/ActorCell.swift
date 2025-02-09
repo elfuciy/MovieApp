@@ -1,19 +1,13 @@
 //
-//  HomeCell.swift
+//  ActorCell.swift
 //  MovieApp
 //
-//  Created by Elsever on 01.02.25.
+//  Created by Elsever on 07.02.25.
 //
 
 import UIKit
 
-protocol MovieCellProtocol {
-    var imageUrl: String { get }
-    var titleText: String { get }
-}
-
-class HomeCell: UICollectionViewCell {
-    
+class ActorCell: UICollectionViewCell {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -51,7 +45,7 @@ class HomeCell: UICollectionViewCell {
             nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor),
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            nameLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
+//            nameLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
     

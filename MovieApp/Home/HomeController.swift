@@ -37,11 +37,12 @@ class HomeController: UIViewController {
             collection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            ])}
+        ])
+    }
     
     private func configure() {
-        modelView.getAllData()
-      
+        modelView.getPlaying()
+        
         modelView.errorHandler = { error in
             print(error)
         }
@@ -67,6 +68,7 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.callBack = { index in
                 let controller = ExtendedListController()
                 controller.sectionName = self.modelView.movieItems.filter({$0.title == self.modelView.sections[index].rawValue}).first!.title
+                controller.items = self.modelView.movieItems.filter({$0.title == self.modelView.sections[index].rawValue}).first!.item
                 self.navigationController?.show(controller, sender: nil)
             }
             return cell
