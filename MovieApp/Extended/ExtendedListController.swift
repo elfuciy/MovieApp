@@ -76,13 +76,8 @@ class ExtendedListController: UIViewController {
     }
     
     @objc func searchData() {
-        searchBarFunc(searchBar: searchBar.text ?? "")
-//        print(searchBar.text ?? "")
-    }
-    
-    func searchBarFunc(searchBar: String) {
-        if searchBar != "" {
-            fileteredData = items.filter{ $0.originalTitle!.lowercased().contains(searchBar.lowercased())}
+        if searchBar.text != "" {
+            fileteredData = items.filter{ $0.originalTitle!.lowercased().contains(searchBar.text?.lowercased() ?? "")}
             isSearched = true
             collection.reloadData()
         } else {
@@ -90,7 +85,7 @@ class ExtendedListController: UIViewController {
             collection.reloadData()
         }
     }
-
+    
     func numberOfItems() -> Int {
             if isSearched {
                 return fileteredData.count
@@ -98,13 +93,12 @@ class ExtendedListController: UIViewController {
                 return items.count
             }
     }
-    
 }
 
 extension ExtendedListController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        numberOfItems()
+       numberOfItems()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

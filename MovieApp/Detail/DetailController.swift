@@ -14,13 +14,13 @@ class DetailController: UIViewController {
         collection.delegate = self
         collection.dataSource = self
         collection.backgroundColor = .clear
-        collection.register(DetailCell.self, forCellWithReuseIdentifier: "ExtendedListCell")
+        collection.register(DetailCell.self, forCellWithReuseIdentifier: "DetailCell")
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
-
-        var movieDeatail: SearchResult?
     
+    var searchArray: [SearchModel]?
+//    var movieDeatail/* = []()*/
     override func viewDidLoad() {
         super.viewDidLoad()
         configurUI()
@@ -29,7 +29,6 @@ class DetailController: UIViewController {
     private func configurUI() {
         view.backgroundColor = .white
         view.addSubview(collection)
-        title = movieDeatail?.title
         
         NSLayoutConstraint.activate([
             collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -38,7 +37,6 @@ class DetailController: UIViewController {
             collection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
-
 }
 
 extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -48,8 +46,8 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collection.dequeueReusableCell(withReuseIdentifier: "ExtendedListCell", for: indexPath) as! DetailCell
-            cell.configure(data: movieDeatail!)
+        let cell = collection.dequeueReusableCell(withReuseIdentifier: "DetailCell", for: indexPath) as! DetailCell
+//        cell.configure(data: movieDeatail, isSeen: false)
         return cell
     }
 }

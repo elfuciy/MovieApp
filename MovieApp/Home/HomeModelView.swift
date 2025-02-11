@@ -18,7 +18,7 @@ enum Sections: String {
 
 struct MovieStruct {
     let title: Sections
-    let endpoint: MovieEndPoint
+    let endpoint: DataEndPoints
 }
 
 struct HomeModel {
@@ -42,7 +42,7 @@ class HomeModelView {
     var errorHandler: ((String) -> Void)?
     var completion: (() -> Void)?
     var path = ""
-        
+    
     func createSecton() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { sectionNumber, environment in
             switch self.sections[sectionNumber] {
@@ -63,15 +63,8 @@ class HomeModelView {
         }
     }
     
-//    func getAllData() {
-//        getNowPlaying()
-//        getPopular()
-//        getUpcoming()
-//        getTopRated()
-//    }
-    
     func getPlaying() {
-        for item in  MovieEndPoint.allCases {
+        for item in  DataEndPoints.allCases {
             self.path = item.path
             self.network.request2(endPoint: self.path, model: Movie.self) { data, error in
                 if let error {
@@ -83,52 +76,4 @@ class HomeModelView {
             }
         }
     }
-//    
-//    func getNowPlaying() {
-//        let path = MovieEndPoint.nowPlaying.path
-//        network.request2(endPoint: path, model: Movie.self) { data, error in
-//            if let error {
-//                self.errorHandler?(error)
-//            } else if let data {
-//                self.movieItems.append(.init(title: "NowPlaying", item: data.results ?? [] ))
-//                self.completion?()
-//            }
-//        }
-//    }
-//    
-//    func getPopular() {
-//        let path = MovieEndPoint.popular.path
-//        network.request2(endPoint: path, model: Movie.self) { data, error in
-//            if let error {
-//                self.errorHandler?(error)
-//            } else if let data {
-//                self.movieItems.append(.init(title: "Popular", item: data.results ?? [] ))
-//                self.completion?()
-//            }
-//        }
-//    }
-//    
-//    func getUpcoming() {
-//        let path = MovieEndPoint.upcoming.path
-//        network.request2(endPoint: path, model: Movie.self) { data, error in
-//            if let error {
-//                self.errorHandler?(error)
-//            } else if let data {
-//                self.movieItems.append(.init(title: "Upcoming", item: data.results ?? [] ))
-//                self.completion?()
-//            }
-//        }
-//    }
-//    
-//    func getTopRated() {
-//        let path = MovieEndPoint.topRated.path
-//        network.request2(endPoint: path, model: Movie.self) { data, error in
-//            if let error {
-//                self.errorHandler?(error)
-//            } else if let data {
-//                self.movieItems.append(.init(title: "TopRated", item: data.results ?? [] ))
-//                self.completion?()
-//            }
-//        }
-//    }
 }

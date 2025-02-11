@@ -1,14 +1,14 @@
 //
-//  ActorController.swift
+//  ActorDetailController.swift
 //  MovieApp
 //
-//  Created by Elsever on 07.02.25.
+//  Created by Elsever on 11.02.25.
 //
 
 import UIKit
 
-class ActorController: UIViewController {
-    
+class ActorDetailController: UIViewController {
+
     private lazy var collection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: CompositionalLayout.doubleCreateImageLabel())
         collection.delegate = self
@@ -18,8 +18,10 @@ class ActorController: UIViewController {
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
-
-    let modelView = ActorViewModel()
+    
+    let modelView = ActorDetailViewModel()
+    
+    var sentId: Int?
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -28,7 +30,7 @@ class ActorController: UIViewController {
     
     private func configurUI() {
         view.addSubview(collection)
-        
+        view.backgroundColor = .white
         NSLayoutConstraint.activate([
 
             collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
@@ -39,7 +41,7 @@ class ActorController: UIViewController {
     }
     
     private func configure() {
-        modelView.getData()
+        modelView.getData(id: sentId ?? 0)
 
         modelView.errorHandler = { error in
             print(error)
@@ -51,20 +53,15 @@ class ActorController: UIViewController {
     }
 }
 
-extension ActorController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension ActorDetailController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        modelView.actorArray.count
+        modelView.actorMoviesArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collection.dequeueReusableCell(withReuseIdentifier: "ImageLabelCell", for: indexPath) as! ImageLabelCell
-        cell.configure(data: modelView.actorArray[indexPath.row])
+        cell.configure(data: modelView.actorMoviesArray[indexPath.row])
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let controller = ActorDetailController()
-        controller.sentId = modelView.actorArray[indexPath.row].id
-        navigationController?.show(controller, sender: nil)
-    }
 }

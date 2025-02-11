@@ -156,7 +156,6 @@ class SearchCell: UICollectionViewCell {
             languageImage.leadingAnchor.constraint(equalTo:  languageLabel.trailingAnchor, constant: 4),
             languageImage.heightAnchor.constraint(equalToConstant: 25),
             languageImage.widthAnchor.constraint(equalToConstant: 25),
-//            languageImage.centerYAnchor.constraint(equalTo: languageView.centerYAnchor),
             
             timeView.heightAnchor.constraint(equalToConstant: 24),
             timeView.widthAnchor.constraint(equalToConstant: 103),

@@ -14,7 +14,7 @@ class SearchController: UIViewController {
         collection.delegate = self
         collection.dataSource = self
         collection.backgroundColor = .clear
-        collection.register(SearchCell.self, forCellWithReuseIdentifier: "SearchCell")
+        collection.register(DetailCell.self, forCellWithReuseIdentifier: "DetailCell")
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
@@ -105,14 +105,15 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collection.dequeueReusableCell(withReuseIdentifier: "SearchCell", for: indexPath) as! SearchCell
-        cell.configure(data: modelView.searchArray[indexPath.row])
+        let cell = collection.dequeueReusableCell(withReuseIdentifier: "DetailCell", for: indexPath) as! DetailCell
+        cell.configure(data: modelView.searchArray[indexPath.row], isSeen: true)
+        cell.backgroundColor = .white
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let controller = DetailController()
-        controller.movieDeatail = modelView.searchArray[indexPath.row]
+//        controller.movieDeatail = modelView.searchArray[indexPath.row]
         navigationController?.show(controller, sender: nil)
     }
 }

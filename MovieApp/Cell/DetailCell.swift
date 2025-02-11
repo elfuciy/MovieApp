@@ -197,10 +197,14 @@ class DetailCell: UICollectionViewCell {
         ])
     }
     
-    func configure(data: SearchProtocol) {
+    func configure(data: SearchProtocol, isSeen: Bool) {
         image.loadImage(url: data.imageUrl)
         nameLabel.text = data.titleText
+        languageLabel.text = data.languageText
+        ratingLabel.text = "\(data.ratingText.rounded())/10"
+        timeLabel.text = "1h 66min"
         infoLabel.text = data.infoText
+        infoLabel.isHidden = isSeen
     }
 }
     

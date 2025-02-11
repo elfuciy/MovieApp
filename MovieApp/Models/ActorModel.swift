@@ -6,15 +6,6 @@
 //
 
 import Foundation
-
-enum ActorEndpoint: String {
-    case actor = "person/popular"
-    
-    var path: String {
-        NetworkManager.shared.configureUrl(endPoint: self.rawValue)
-    }
-}
-
 // MARK: - Welcome
 struct ActorModel: Codable {
     let page: Int?

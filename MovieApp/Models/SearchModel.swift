@@ -6,19 +6,6 @@
 //
 
 import Foundation
-
-enum SearchEndpoint {
-    case query(query: String)
-    
-    var path: String {
-        switch self {
-        case .query(let queryString):
-            NetworkManager.shared.configureUrl(endPoint: "search/movie?query=\(queryString)")
-        }
-    }
-}
-
-
 // MARK: - Welcome
 struct SearchModel: Codable {
     let page: Int?

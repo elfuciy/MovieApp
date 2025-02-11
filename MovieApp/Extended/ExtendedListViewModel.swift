@@ -8,21 +8,6 @@
 import Foundation
 import UIKit
 
-//struct MovieStruct {
-//    let title: Sections
-//    let endpoint: MovieEndPoint
-//}
 class ExtendedListViewModel {
     
-    var movieItems: [MovieResult] = []
-    var fileteredData: [MovieResult] = []
-    
-    let network = NetworkManager()
-    
-    var errorHandler: ((String) -> Void)?
-    var completion: (() -> Void)?
-    
-    var isSearched: Bool = false
-    
-   
 }

@@ -21,3 +21,8 @@ protocol SearchProtocol {
 //    var directorText: String { get }
     var languageText: String { get }
 }
+
+//protocol ArrayProtocol {}
+//extension SearchResult: ArrayProtocol {}
+//extension MovieResult: ArrayProtocol{}
+
