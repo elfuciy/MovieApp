@@ -89,9 +89,8 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
         let controller = DetailController()
         switch modelView.sections[indexPath.section] {
         case .nowPlaying, .upcoming, .trending, .popular:
-//            controller.movieDeatail = modelView.movieItems.filter({$0.title == self.modelView.sections[indexPath.section].rawValue}).first!.item[indexPath.row]
-            print(modelView.movieItems.filter({$0.title == self.modelView.sections[indexPath.section].rawValue}).first!.item[indexPath.row])
-//            navigationController?.show(controller, sender: self)
+            controller.movieDeatail = modelView.movieItems.filter({$0.title == self.modelView.sections[indexPath.section].rawValue}).first!.item[indexPath.row]
+        navigationController?.show(controller, sender: self)
         default:
             print(indexPath.section)
         }

@@ -28,11 +28,11 @@ class TabBar: UITabBarController, UITabBarControllerDelegate {
         tabOne.tabBarItem = tabOneBarItem
     
         let tabTwo = SearchController()
-        let tabTwoBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magn"), selectedImage: UIImage(systemName: "magnifyingglass.fill"))
+        let tabTwoBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), selectedImage: UIImage(systemName: "magnifyingglass.fill"))
         tabTwo.tabBarItem = tabTwoBarItem
         
         let tabThree = ActorController()
-        let tabThreeBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magn"), selectedImage: UIImage(systemName: "magnifyingglass.fill"))
+        let tabThreeBarItem = UITabBarItem(title: "Actor", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"))
         tabThree.tabBarItem = tabThreeBarItem
         
         self.viewControllers = [tabOne, tabTwo, tabThree]

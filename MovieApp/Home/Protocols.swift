@@ -12,7 +12,7 @@ protocol MovieCellProtocol {
     var titleText: String { get }
 }
 
-protocol SearchProtocol {
+protocol DetailProtocol {
     var imageUrl: String { get }
     var titleText: String { get }
     var ratingText: Double { get }
@@ -21,8 +21,3 @@ protocol SearchProtocol {
 //    var directorText: String { get }
     var languageText: String { get }
 }
-
-//protocol ArrayProtocol {}
-//extension SearchResult: ArrayProtocol {}
-//extension MovieResult: ArrayProtocol{}
-

@@ -54,4 +54,13 @@ class CompositionalLayout {
         section.interGroupSpacing = 12
         return UICollectionViewCompositionalLayout(section: section)
     }
+    
+    static func createSelection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(87), heightDimension: .absolute(40)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 32, bottom: 0, trailing: 32)
+        section.orthogonalScrollingBehavior = .continuous
+        return section
+    }
 }

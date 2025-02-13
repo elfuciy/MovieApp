@@ -27,7 +27,7 @@ struct Dates: Codable {
 }
 
 // MARK: - Result
-struct MovieResult: Codable, MovieCellProtocol, SearchProtocol {
+struct MovieResult: Codable, MovieCellProtocol, DetailProtocol {
     let adult: Bool?
     let backdropPath: String?
     let genreIDS: [Int]?
@@ -45,7 +45,7 @@ struct MovieResult: Codable, MovieCellProtocol, SearchProtocol {
     }
 
     var titleText: String {
-        return "\(originalTitle ?? "") (\(releaseDate?.split(separator: "-")[0] ?? ""))"
+        return "\(originalTitle ?? "") (\(releaseDate?.components(separatedBy: "-").first ?? ""))"
     }
     
     var ratingText: Double {

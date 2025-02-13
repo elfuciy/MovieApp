@@ -10,19 +10,21 @@ import Foundation
 class ActorViewModel {
     
     var actorArray = [ActorResult]()
-    
+    var actorArrayData: ActorModel?
     var network = NetworkManager()
     
     var errorHandler: ((String) -> Void)?
     var completion: (() -> Void)?
     
-    func getData() {
-        let path = ActorEndpoint.actor.path
+    func getData(page: Int) {
+        let path = ActorEndpoint.actor(page: page).path
+        print(path)
         network.request2(endPoint: path, model: ActorModel.self) { data, error in
             if let error {
                 self.errorHandler?(error)
             } else if let data {
-                self.actorArray = data.results ?? []
+                self.actorArrayData = data
+                self.actorArray.append(contentsOf: data.results ?? [])
                 self.completion?()
             }
         }

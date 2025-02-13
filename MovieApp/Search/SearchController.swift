@@ -49,6 +49,8 @@ class SearchController: UIViewController {
     
     let modelView = SearchViewModel()
     
+    var pageNumber = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -87,7 +89,7 @@ class SearchController: UIViewController {
     }
     
     @objc func searchData() {
-        modelView.getData(queryString: searchBar.text ?? "")
+        modelView.getData(queryString: searchBar.text ?? "", page: pageNumber)
         
         modelView.errorHandler = { error in
             print(error)
@@ -101,19 +103,30 @@ class SearchController: UIViewController {
 
 extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        modelView.searchArray.count
+        modelView.searchMovieResult.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collection.dequeueReusableCell(withReuseIdentifier: "DetailCell", for: indexPath) as! DetailCell
-        cell.configure(data: modelView.searchArray[indexPath.row], isSeen: true)
+        cell.configure(data: modelView.searchMovieResult[indexPath.row], isSeen: true)
         cell.backgroundColor = .white
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let controller = DetailController()
-//        controller.movieDeatail = modelView.searchArray[indexPath.row]
+        controller.movieDeatail = modelView.searchMovieResult[indexPath.row]
         navigationController?.show(controller, sender: nil)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if pageNumber < modelView.searchMovie?.totalPages ?? 0 && indexPath.row == modelView.searchMovieResult.count - 1 {
+            pageNumber += 1
+            print(pageNumber)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+                self.searchData()
+            }
+        }
+        
     }
 }

@@ -184,7 +184,7 @@ class SearchCell: UICollectionViewCell {
         ])
     }
     
-    func configure(data: SearchProtocol) {
+    func configure(data: DetailProtocol) {
         image.loadImage(url: data.imageUrl)
         nameLabel.text = data.titleText
         languageLabel.text = data.languageText

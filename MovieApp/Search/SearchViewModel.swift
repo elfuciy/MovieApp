@@ -13,16 +13,18 @@ class SearchViewModel {
     
     var errorHandler: ((String) -> Void)?
     var completion: (() -> Void)?
-    var searchArray = [SearchResult]()
+    var searchMovie: Movie?
+    var searchMovieResult = [MovieResult]()
     
-    func getData(queryString: String) {
-        let path = SearchEndpoint.query(query: queryString).path
+    func getData(queryString: String, page: Int) {
+        let path = SearchEndpoint.query(query: queryString, page: page).path
         print(path)
-        network.request2(endPoint: path, model: SearchModel.self) { data, error in
+        network.request2(endPoint: path, model: Movie.self) { data, error in
             if let error {
                 self.errorHandler?(error)
             } else if let data {
-                self.searchArray = data.results ?? []
+                self.searchMovie = data
+                self.searchMovieResult.append(contentsOf: data.results ?? []) 
                 self.completion?()
             }
         }

@@ -19,8 +19,7 @@ class DetailController: UIViewController {
         return collection
     }()
     
-    var searchArray: [SearchModel]?
-//    var movieDeatail/* = []()*/
+    var movieDeatail: MovieResult?
     override func viewDidLoad() {
         super.viewDidLoad()
         configurUI()
@@ -28,6 +27,7 @@ class DetailController: UIViewController {
     
     private func configurUI() {
         view.backgroundColor = .white
+        title = movieDeatail?.title
         view.addSubview(collection)
         
         NSLayoutConstraint.activate([
@@ -47,7 +47,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collection.dequeueReusableCell(withReuseIdentifier: "DetailCell", for: indexPath) as! DetailCell
-//        cell.configure(data: movieDeatail, isSeen: false)
+        cell.configure(data: movieDeatail!, isSeen: false)
         return cell
     }
 }

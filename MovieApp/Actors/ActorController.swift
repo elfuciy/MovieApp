@@ -20,9 +20,11 @@ class ActorController: UIViewController {
     }()
 
     let modelView = ActorViewModel()
+    
+    var pageNumber = 1
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure()
+        getData()
         configurUI()
     }
     
@@ -38,8 +40,8 @@ class ActorController: UIViewController {
         ])
     }
     
-    private func configure() {
-        modelView.getData()
+    private func getData() {
+        modelView.getData(page: pageNumber)
 
         modelView.errorHandler = { error in
             print(error)
@@ -66,5 +68,15 @@ extension ActorController: UICollectionViewDelegate, UICollectionViewDataSource 
         let controller = ActorDetailController()
         controller.sentId = modelView.actorArray[indexPath.row].id
         navigationController?.show(controller, sender: nil)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if pageNumber < modelView.actorArrayData?.totalPages ?? 0 && indexPath.row == modelView.actorArray.count - 1 {
+            pageNumber += 1
+            print(pageNumber)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+                self.getData()
+            }
+        }
     }
 }
