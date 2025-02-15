@@ -68,6 +68,9 @@ struct MovieResult: Codable, MovieCellProtocol, DetailProtocol {
         originalLanguage ?? ""
     }
     
+    var movieid: Int {
+        id ?? 0
+    }
     
     enum CodingKeys: String, CodingKey {
         case adult

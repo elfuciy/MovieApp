@@ -71,9 +71,7 @@ extension ActorController: UICollectionViewDelegate, UICollectionViewDataSource 
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if pageNumber < modelView.actorArrayData?.totalPages ?? 0 && indexPath.row == modelView.actorArray.count - 1 {
-            pageNumber += 1
-            print(pageNumber)
+        if modelView.actorArrayData?.page ?? 0 < modelView.actorArrayData?.totalPages ?? 0 && indexPath.row == modelView.actorArray.count - 1 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1){
                 self.getData()
             }

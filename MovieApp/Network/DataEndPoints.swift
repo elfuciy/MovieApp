@@ -13,7 +13,6 @@ enum DataEndPoints: CaseIterable {
     case topRated
     case upcoming
     
-    
     var path: String {
         switch self {
         case .nowPlaying:
@@ -24,13 +23,13 @@ enum DataEndPoints: CaseIterable {
             NetworkManager.shared.configureUrl(endPoint: "movie/top_rated")
         case .upcoming:
             NetworkManager.shared.configureUrl(endPoint: "movie/upcoming")
+
         }
     }
 }
     
     enum SearchEndpoint {
         case query(query: String, page: Int)
-        
         var path: String {
             switch self {
             case .query(let queryString, let page):
@@ -52,3 +51,14 @@ enum DataEndPoints: CaseIterable {
             }
         }
     }
+
+enum Detail {
+    case detail(id: Int)
+    
+    var path: String {
+        switch self {
+        case .detail(let id):
+            NetworkManager.shared.configureUrl(endPoint: "movie/\(id)")
+        }
+    }
+}

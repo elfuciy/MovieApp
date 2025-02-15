@@ -26,7 +26,7 @@ class DetailController: UIViewController {
     }
     
     private func configurUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGray6
         title = movieDeatail?.title
         view.addSubview(collection)
         

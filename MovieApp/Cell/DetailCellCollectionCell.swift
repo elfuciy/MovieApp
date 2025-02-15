@@ -56,11 +56,19 @@ class DetailCellCollectionCell: UICollectionViewCell {
     
     private func configureUI() {
         addSubview(label)
-//        layer.cornerRadius = 20
+        layer.cornerRadius = 4
+        backgroundColor = .systemGray5
+        
         NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: centerYAnchor)
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8)
         ])
+    }
+    
+    func configure(data: String) {
+        label.text = data
     }
 
 }

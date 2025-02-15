@@ -116,8 +116,9 @@ class DetailCell: UICollectionViewCell {
     
     private lazy var selectionView: UIView = {
         let view = UIView()
-        view.backgroundColor = .red
+        view.backgroundColor = .white
         view.layer.cornerRadius = 20
+//        view.isUserInteractionEnabled = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -132,35 +133,79 @@ class DetailCell: UICollectionViewCell {
     
     private lazy var detail: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
-        label.text = "Info"
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.text = "Detail"
+        label.textColor = .white
         label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.tag = 0
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeSelection))
+        label.addGestureRecognizer(tapGesture)
         return label
     }()
     
     private lazy var trailer: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
-        label.text = "Info"
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.text = "Trailer"
         label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.tag = 1
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeSelection))
+        label.addGestureRecognizer(tapGesture)
         return label
     }()
     
     private lazy var cast: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
-        label.text = "Info"
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.text = "Cast"
         label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.tag = 2
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeSelection))
+        label.addGestureRecognizer(tapGesture)
         return label
     }()
     
     private lazy var shots: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
-        label.text = "Info"
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.text = "Shots"
+        label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.tag = 3
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeSelection))
+        label.addGestureRecognizer(tapGesture)
+        return label
+    }()
+    
+    private lazy var genre: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.text = "Genre:"
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var mpaRating: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.text = "MPAA Rating:"
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var director: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.text = "Director:"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -168,17 +213,25 @@ class DetailCell: UICollectionViewCell {
     
     
     private lazy var collection: UICollectionView = {
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: modelView.createSection())
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: modelView.createSection(tag: tagNumber))
         collection.delegate = self
         collection.dataSource = self
         collection.backgroundColor = .clear
         collection.register(DetailCellCollectionCell.self, forCellWithReuseIdentifier: "DetailCellCollectionCell")
-        collection.register(InfoCell.self, forCellWithReuseIdentifier: "InfoCell")
+        collection.register(TrailerCell.self, forCellWithReuseIdentifier: "TrailerCell")
         collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.isScrollEnabled = false
         return collection
     }()
     
+    private var leftConstraint = NSLayoutConstraint()
+    private var leftCollectionConstraint = NSLayoutConstraint()
+    
     let modelView = DetailCellViewModel()
+    
+    var array = [DetailProtocol]()
+    var tagNumber = 0
+//    let array = [detail.tag.description, trailer.tag, cast.tag, shots.tag]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -189,17 +242,20 @@ class DetailCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     private func configureUI() {
         layer.cornerRadius = 16
-//        backgroundColor = .white
         [image,
          nameLabel,
          ratingView,
          languageView,
          timeView,
          infoLabel,
-//         collection,
-         selectionView
+         collection,
+         selectionView,
+         genre,
+         mpaRating,
+         director
          ].forEach({addSubview($0)})
         ratingView.addSubview(ratingLabel)
         ratingView.addSubview(ratingImage)
@@ -207,14 +263,16 @@ class DetailCell: UICollectionViewCell {
         languageView.addSubview(languageImage)
         timeView.addSubview(timeLabel)
         timeView.addSubview(timeImage)
+        selectionView.addSubview(selectedView)
         selectionView.addSubview(detail)
         selectionView.addSubview(trailer)
         selectionView.addSubview(cast)
         selectionView.addSubview(shots)
+       
+        leftConstraint = selectedView.leadingAnchor.constraint(equalTo: selectionView.leadingAnchor)
+        leftCollectionConstraint = collection.leadingAnchor.constraint(equalTo: genre.trailingAnchor, constant: 16)
 
-        
-        
-        
+
         NSLayoutConstraint.activate([
             image.heightAnchor.constraint(equalToConstant: 350),
             image.topAnchor.constraint(equalTo: topAnchor, constant: 24),
@@ -267,20 +325,52 @@ class DetailCell: UICollectionViewCell {
             selectionView.widthAnchor.constraint(equalToConstant: 350),
             selectionView.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 24),
             selectionView.centerXAnchor.constraint(equalTo: centerXAnchor),
-//            collection.heightAnchor.constraint(equalToConstant: 205),
-//            collection.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
-//            collection.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 24),
-//            collection.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-//            collection.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
             
+            selectedView.heightAnchor.constraint(equalToConstant: 42),
+            selectedView.widthAnchor.constraint(equalToConstant: 87),
+            leftConstraint,
+            selectedView.centerYAnchor.constraint(equalTo: selectionView.centerYAnchor),
             
-            infoLabel.topAnchor.constraint(equalTo: selectionView.bottomAnchor, constant: 24),
+            detail.leadingAnchor.constraint(equalTo: selectionView.leadingAnchor, constant: 20),
+            detail.widthAnchor.constraint(equalToConstant: 87),
+            detail.centerYAnchor.constraint(equalTo: selectionView.centerYAnchor),
+            
+            trailer.leadingAnchor.constraint(equalTo: detail.trailingAnchor),
+            trailer.widthAnchor.constraint(equalToConstant: 87),
+
+            trailer.centerYAnchor.constraint(equalTo: selectionView.centerYAnchor),
+
+            cast.leadingAnchor.constraint(equalTo: trailer.trailingAnchor),
+            cast.widthAnchor.constraint(equalToConstant: 87),
+            cast.centerYAnchor.constraint(equalTo: selectionView.centerYAnchor),
+
+            shots.leadingAnchor.constraint(equalTo: cast.trailingAnchor),
+            shots.widthAnchor.constraint(equalToConstant: 87),
+
+            shots.centerYAnchor.constraint(equalTo: selectionView.centerYAnchor),
+
+            genre.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
+            genre.topAnchor.constraint(equalTo: selectionView.bottomAnchor, constant: 30),
+            
+            mpaRating.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
+            mpaRating.topAnchor.constraint(equalTo: genre.bottomAnchor, constant: 48),
+            
+            director.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
+            director.topAnchor.constraint(equalTo: mpaRating.bottomAnchor, constant: 48),
+            
+            collection.heightAnchor.constraint(equalToConstant: 200),
+            collection.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+            collection.topAnchor.constraint(equalTo: selectionView.bottomAnchor),
+            collection.leadingAnchor.constraint(equalTo: genre.trailingAnchor, constant: 16),
+            
+            infoLabel.topAnchor.constraint(equalTo: collection.bottomAnchor, constant: 24),
             infoLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
             infoLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
             infoLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
             
         ])
     }
+    
     
     func configure(data: DetailProtocol, isSeen: Bool) {
         image.loadImage(url: data.imageUrl)
@@ -290,29 +380,80 @@ class DetailCell: UICollectionViewCell {
         timeLabel.text = "1h 66min"
         infoLabel.text = data.infoText
         infoLabel.isHidden = isSeen
+        
+        modelView.getData(id: data.movieid)
+        
+        modelView.errorHandler = { error in
+            print(error)
+        }
+        
+        modelView.completion = {
+            self.collection.reloadData()
+        }
+    }
+    
+    func hideLabel() {
+        switch modelView.selections[tagNumber] {
+        case .detail:
+            genre.isHidden = false
+            mpaRating.isHidden = false
+            director.isHidden = false
+        case .trailer, .cast, .shots:
+            genre.isHidden = true
+            mpaRating.isHidden = true
+            director.isHidden = true
+        }
+    }
+    
+    @objc func changeSelection(_ sender: UITapGestureRecognizer) {
+        if let label = sender.view as? UILabel {
+            tagNumber = label.tag
+        }
+        hideLabel()
+        collection.reloadData()
     }
 }
     
 extension DetailCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        4
+        modelView.numberOfCells(section: section, tag: tagNumber)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch modelView.detailSections[indexPath.section] {
-        case .selection:
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: "DetailCellCollectionCell", for: indexPath) as! DetailCellCollectionCell
-            cell.backgroundColor = .brown
+        switch modelView.selections[tagNumber] {
+        case .detail:
+            switch modelView.detailSections[indexPath.section] {
+            case .genre:
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: "DetailCellCollectionCell", for: indexPath) as! DetailCellCollectionCell
+                cell.configure(data: modelView.detailArrayData?.genres?[indexPath.row].name ?? "")
+                return cell
+            case .rating:
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: "DetailCellCollectionCell", for: indexPath) as! DetailCellCollectionCell
+                cell.configure(data: "rating")
+                return cell
+            case .director:
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: "DetailCellCollectionCell", for: indexPath) as! DetailCellCollectionCell
+                cell.configure(data: "director")
+                return cell
+            }
+        case .trailer:
+            let cell = collection.dequeueReusableCell(withReuseIdentifier: "TrailerCell", for: indexPath) as! TrailerCell
+            cell.image.backgroundColor = .red
             return cell
-        case .info:
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: "InfoCell", for: indexPath) as! InfoCell
-            cell.backgroundColor = .brown
+        case .cast:
+            let cell = collection.dequeueReusableCell(withReuseIdentifier: "TrailerCell", for: indexPath) as! TrailerCell
+            cell.image.backgroundColor = .blue
+            return cell
+        case .shots:
+            let cell = collection.dequeueReusableCell(withReuseIdentifier: "TrailerCell", for: indexPath) as! TrailerCell
+            cell.image.backgroundColor = .yellow
             return cell
         }
+        
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        2
+        modelView.numberOfSections(tag: tagNumber)
     }
 }
 

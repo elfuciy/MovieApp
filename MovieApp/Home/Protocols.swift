@@ -20,4 +20,5 @@ protocol DetailProtocol {
     var infoText: String { get }
 //    var directorText: String { get }
     var languageText: String { get }
+    var movieid: Int { get }
 }
