@@ -90,4 +90,6 @@ class DetailCellViewModel {
             1
         }
     }
+    
+    
 }

@@ -139,6 +139,7 @@ class DetailCell: UICollectionViewCell {
         label.numberOfLines = 0
         label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
         label.tag = 0
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeSelection))
         label.addGestureRecognizer(tapGesture)
@@ -153,6 +154,7 @@ class DetailCell: UICollectionViewCell {
         label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.tag = 1
+        label.textAlignment = .center
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeSelection))
         label.addGestureRecognizer(tapGesture)
         return label
@@ -166,6 +168,7 @@ class DetailCell: UICollectionViewCell {
         label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.tag = 2
+        label.textAlignment = .center
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeSelection))
         label.addGestureRecognizer(tapGesture)
         return label
@@ -179,6 +182,7 @@ class DetailCell: UICollectionViewCell {
         label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.tag = 3
+        label.textAlignment = .center
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeSelection))
         label.addGestureRecognizer(tapGesture)
         return label
@@ -331,7 +335,7 @@ class DetailCell: UICollectionViewCell {
             leftConstraint,
             selectedView.centerYAnchor.constraint(equalTo: selectionView.centerYAnchor),
             
-            detail.leadingAnchor.constraint(equalTo: selectionView.leadingAnchor, constant: 20),
+            detail.leadingAnchor.constraint(equalTo: selectionView.leadingAnchor, constant: 0),
             detail.widthAnchor.constraint(equalToConstant: 87),
             detail.centerYAnchor.constraint(equalTo: selectionView.centerYAnchor),
             
@@ -392,6 +396,25 @@ class DetailCell: UICollectionViewCell {
         }
     }
     
+    @objc func changeSelection(_ sender: UITapGestureRecognizer) {
+        DispatchQueue.main.async {
+            self.animationChange()
+        }
+        
+        if let label = sender.view as? UILabel {
+            tagNumber = label.tag
+        }
+        hideLabel()
+        collection.reloadData()
+    }
+    
+    func reset() {
+        self.detail.textColor = .black
+        self.cast.textColor = .black
+        self.shots.textColor = .black
+        self.trailer.textColor = .black
+    }
+    
     func hideLabel() {
         switch modelView.selections[tagNumber] {
         case .detail:
@@ -405,13 +428,54 @@ class DetailCell: UICollectionViewCell {
         }
     }
     
-    @objc func changeSelection(_ sender: UITapGestureRecognizer) {
-        if let label = sender.view as? UILabel {
-            tagNumber = label.tag
+    func animationChange() {
+        switch modelView.selections[tagNumber] {
+        case .detail:
+            UILabel.animate(withDuration: 1) {
+                self.reset()
+            } completion: { _ in
+                UIView.animate(withDuration: 0.5) {
+                self.leftConstraint.constant = 0
+                self.layoutIfNeeded()
+                    self.detail.textColor = .white
+                }
+            }
+        case .trailer:
+            UILabel.animate(withDuration: 1) {
+                self.reset()
+            } completion: { _ in
+                UIView.animate(withDuration: 1) {
+                    self.leftConstraint.constant = 87
+                    self.layoutIfNeeded()
+                    self.trailer.textColor = .white
+                }
+            }
+        case .cast:
+            UILabel.animate(withDuration: 1) {
+                self.reset()
+            } completion: { _ in
+                UIView.animate(withDuration: 1) {
+                    self.leftConstraint.constant = 87 * 2
+                    self.layoutIfNeeded()
+                } completion: { _ in
+                    UILabel.animate(withDuration: 10) {
+                        self.cast.textColor = .white
+                    }
+                }
+            }
+        case .shots:
+            UILabel.animate(withDuration: 1) {
+                self.reset()
+            } completion: { _ in
+                UIView.animate(withDuration: 1) {
+                    self.leftConstraint.constant = 87 * 3
+                    self.layoutIfNeeded()
+                    self.shots.textColor = .white
+                }
+            }
         }
-        hideLabel()
-        collection.reloadData()
     }
+    
 }
     
 extension DetailCell: UICollectionViewDelegate, UICollectionViewDataSource {
